@@ -5,7 +5,7 @@ This network architecture has three subnet tiers split across three availability
 
 <img src="https://user-images.githubusercontent.com/83971386/127896132-06db5721-51ec-4c5f-81ee-6e39d14fa803.png" width="90%"></img>
 # Prerequisite 
-* An AWS Account with an IAM user capable of creating resources – `AdminstratorAccess
+* An AWS Account with an IAM user capable of creating resources – `AdminstratorAccess`
 * A locally configured AWS profile for the above IAM user
 * Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
