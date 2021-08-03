@@ -5,6 +5,12 @@
 *.tfstate
 *.tfstate.*
 
+# .pem files
+*.pem
+
+# .ds_store files
+*.ds_store
+
 # Crash log files
 crash.log
 
