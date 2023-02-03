@@ -4,7 +4,7 @@
 This network architecture has three subnet tiers split across three availability zones. The web subnets also have a VPC routing table that will provide it access to the internet. The application and database tiers will not have such access; their routing tables will only allow internal network communication.
 
 <img src="https://user-images.githubusercontent.com/83971386/127896132-06db5721-51ec-4c5f-81ee-6e39d14fa803.png" width="90%"></img>
-# Prerequisite 
+# Prerequisites
 * An AWS Account with an IAM user capable of creating resources – `AdminstratorAccess`
 * A locally configured AWS profile for the above IAM user
 * Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
