@@ -1,5 +1,5 @@
 project_name = [
-  "BJWRD-Three-Tier-Architecture"
+  "three-tier-architecture"
 ]
 
 environment = [
@@ -23,7 +23,7 @@ identifier = [
 ]
 
 instance_class = [
-  "db.t2.micro"
+  "db.t2.nano"
 ]
 
 multi_az = [
