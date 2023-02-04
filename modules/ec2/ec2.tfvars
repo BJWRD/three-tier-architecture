@@ -1,5 +1,5 @@
 project_name = [
-  "BJWRD-Three-Tier-Architecture"
+  "three-tier-architecture"
 ]
 
 environment = [
@@ -7,9 +7,13 @@ environment = [
 ]
 
 image_id = [
-  "ami-089539692cca55c6c"
+  "ami-084e8c05825742534"
 ]
 
 instance_type = [
-  "t2.micro"
+  "t2.nano"
+]
+
+name_prefix = [
+  "app-launch-template"
 ]
