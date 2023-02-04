@@ -1,3 +1,8 @@
-#! /bin/bash
-sudo yum install httpd -y
-sudo systemctl enable --now httpd
+#!/bin/bash
+#VM Startup Script
+sudo yum update -y
+sudo amazon-linux-extras install docker -y
+sudo systemctl enable docker --now
+sudo systemctl enable containerd.service --now
+sudo usermod -a -G docker ec2-user
+sudo docker pull bjwrd/app.py
