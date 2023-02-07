@@ -23,7 +23,7 @@ variable "storage" {
   type = string
 }
 
-variable "aws_db_subnet_group_db_subnet_group" {
+variable "db_subnet_group_name" {
   description = "Database Subnet Group "
   type = string
 }
@@ -55,6 +55,7 @@ variable "database_username" {
 
 variable "database_password" {
   description = "Database Password"
+  sensitive = "true"
   type = string
 }
 
@@ -68,7 +69,7 @@ variable "publicly_accessible" {
   type = string
 }
 
-variable "aws_security_group_db_sg" {
+variable "database_security_group" {
   description = "Database Security Group"
   type = string
 }
