@@ -1,141 +1,33 @@
 variable "project_name" {
+  description = "Name of Project"
   type    = string
-  default = "BJWRD-Three-Tier-Architecture"
+  default = "three-tier-architecture"
 }
 
 variable "environment" {
+  description = "Environment Type"
   type    = string
   default = "dev"
 }
 
-#EC2 Module Variables
-variable "image_id" {
-  type    = string
-  default = "ami-089539692cca55c6c"
-}
-
-variable "instance_type" {
-  type    = string
-  default = "t2.micro"
-}
-
-variable "name_prefix" {
-  type    = string
-  default = "app-launch-template"
-}
-
-variable "id_app" {
-  type    = string
-  default = "aws_launch_template.app_launch_template.id"
-}
-
-#RDS Module Variables
-variable "engine_name" {
-  type    = string
-  default = "mysql"
-}
-
-variable "engine_version" {
-  type    = string
-  default = "8.0"
-}
-
-variable "storage" {
-  type    = string
-  default = "10"
-}
-
-variable "identifier" {
-  type    = string
-  default = "db-mysql-dev"
-}
-
-variable "instance_class" {
-  type    = string
-  default = "db.t2.micro"
-}
-
-variable "multi_az" {
-  type    = string
-  default = "true"
-}
-
-variable "database_name" {
-  type    = string
-  default = "dbmysql"
-}
-
-variable "database_username" {
-  type    = string
-  default = "dbadmin"
-}
-
-variable "database_password" {
-  type    = string
-  default = "S0methingS3cure!"
-}
-
-variable "database_port" {
-  type    = string
-  default = "3306"
-}
-
-variable "publicly_accessible" {
-  type    = string
-  default = "false"
-}
-
-variable "database_snapshot" {
-  type    = string
-  default = "true"
-}
-
-#VPC Module Variables
-variable "aws_region" {
-  type    = string
-  default = "eu-west-2"
-}
+################################################################################
+# VPC Module - Variables 
+################################################################################
 
 variable "vpc_id" {
+  description = "The VPC to be deployed"
   type    = string
-  default = "aws_vpc.vpc.id"
+  default = "aws_vpc.main.id"
 }
 
 variable "vpc_cidr" {
+  description = "The VPC Network Range"
   type    = string
   default = "10.0.0.0/16"
 }
 
-variable "route_table_id" {
-  type    = string
-  default = "aws_route_table.public.id"
-}
-
-variable "gateway_id" {
-  type    = string
-  default = "aws_internet_gateway.igw.id"
-}
-
-variable "destination_cidr_block" {
-  type    = string
-  default = "0.0.0.0/0"
-}
-
-variable "availability_zones" {
-  default = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-}
-
-variable "load_balancer_type" {
-  type    = string
-  default = "application"
-}
-
-variable "subnet_id" {
-  type    = string
-  default = "aws_subnet.public_subnet.id"
-}
-
-variable "az_public_subnet" {
+variable "public_subnet" {
+  description = "A list of public subnets inside the VPC"
   type = map(string)
   default = {
     "eu-west-2a" : "10.0.0.0/24",
@@ -144,7 +36,8 @@ variable "az_public_subnet" {
   }
 }
 
-variable "az_private_subnet" {
+variable "private_subnet" {
+  description = "A list of private subnets inside the VPC"
   type = map(string)
   default = {
     "eu-west-2a" : "10.0.101.0/24",
@@ -153,7 +46,8 @@ variable "az_private_subnet" {
   }
 }
 
-variable "az_database_subnet" {
+variable "database_subnet" {
+  description = "A list of database subnets inside the VPC"
   type = map(string)
   default = {
     "eu-west-2a" : "10.0.201.0/24",
@@ -162,83 +56,261 @@ variable "az_database_subnet" {
   }
 }
 
-variable "aws_subnet_public_subnet" {
-  type    = string
-  default = "aws_subnet.public_subnet.id"
+variable "availability_zones" {
+  description = "Availability Zones used"
+  default = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
 
-variable "aws_subnet_private_subnet" {
-  type    = string
-  default = "aws_subnet.private_subnet.id"
-}
-
-variable "aws_subnet_database_subnet" {
-  type    = string
-  default = "aws_subnet.database_subnet.id"
-}
-
-variable "aws_db_subnet_group_db_subnet" {
-  type    = string
-  default = "aws_db_subnet_group.db_subnet.id"
-}
-
-variable "app_alb_lb" {
-  type    = string
-  default = "app-alb-lb"
-}
-
-variable "app_target_group" {
-  type    = string
-  default = "app-target-group"
-}
-
-variable "app_autoscaling_group" {
-  type    = string
-  default = "app-autoscaling-group"
-}
-
-variable "database_subnet_group" {
-  type    = string
-  default = "database-subnet-group"
-}
-
-#Security Module Variables
-variable "vpc_security_group_ids" {
-  type    = string
-  default = "aws_security_group.app_instance_sg.id"
-}
-
-variable "security_group_app" {
-  type    = string
-  default = "aws_security_group.alb_app_http.id"
-}
-
-variable "cidr_blocks" {
+variable "cidr_block" {
+  description = "CIDR Block to allow traffic via"
   type    = string
   default = "0.0.0.0/0"
 }
 
-variable "security_group_alb_app_http" {
+variable "route_table_id" {
+  description = "The ID of the Routing Table"
   type    = string
-  default = "aws_security_group.alb_app_http.id"
+  default = "aws_route_table.main[each.key].id"
 }
 
-variable "aws_security_group_db_security_group" {
+variable "gateway_id" {
+  description = "Identifier of the VPC Internet Gateway"
   type    = string
-  default = "aws_security_group_db_security_group.id"
+  default = "aws_internet_gateway.main.id"
+}
+
+variable "subnet_id" {
+  description =  "subnet ID which resources will be launched in"
+  type    = string
+  default = "aws_subnet.public_subnet.id"
+}
+
+variable "load_balancer_type" {
+  description = "The type of Load Balancer"
+  type    = string
+  default = "application"
+}
+
+variable "security_group_alb_sg" {
+  description = "Application Load Balancer Security Group"
+  type    = string
+  default = "aws_security_group.alb_sg.id"
+}
+
+variable "app_alb" {
+  description = "Name of Application Load Balancer"
+  type    = string
+  default = "app-alb"
+}
+
+variable "alb_internal" {
+  description = "Application Load Balancer Network Type"
+  type    = string
+  default = "false"
+}
+
+variable "load_balancer_arn" {
+  description = "Application Load Balancer ARN"
+  type = string
+  default = "aws_lb.main.arn"
+}
+
+variable "alb_listener_port" {
+  description = "Application Load Balancer Listener Port"
+  type = string
+  default = "80"
+}
+
+variable "alb_listener_protocol" {
+  description = "Application Load Balancer Listener Protocol"
+  type = string
+  default = "HTTP"
+}
+
+variable "alb_listener_type" {
+  description = "Application Load Balancer Listener Type"
+  type = string
+  default = "forward"
+}
+
+variable "alb_target_group_arn" {
+  description = "Application Load Balancer Target Group ARN"
+  type = string
+  default = "aws_lb_target_group.main.arn"
+}
+
+variable "alb_target_group" {
+  description = "Application Load Balancer Target Group"
+  type = string
+  default = "alb-target-group"
+}
+
+variable "alb_target_group_port" {
+  description = "Application Load Balancer Target Group Port"
+  type = string
+  default = "80"
+}
+
+variable "alb_target_group_protocol" {
+  description = "Application Load Balancer Target Group Protocol"
+  type = string
+  default = "HTTP"
+}
+
+variable "app_autoscaling_group" {
+  description = "Autoscaling Group Name"
+  type    = string
+  default = "app-autoscaling-group"
+}
+
+variable "desired_capacity" {
+  description = "The number of EC2 instances that should be running in the group"
+  type = string
+  default = "1"
+}
+
+variable "max_size" {
+  description = "The maximum size of the autoscale group"
+  type = string
+  default = "1"
+}
+
+variable "min_size" {
+  description = "The minimum size of the autoscale group"
+  type = string
+  default = "1"
+}
+
+variable "database_subnet_group" {
+  description = "Database Subnet Group Name"
+  type    = string
+  default = "database-subnet-group"
 }
 
 variable "alb_app_security_group" {
+  description = "Application Load Balancer App Security Group Name"
   type    = string
   default = "alb-app-security-group"
 }
 
 variable "app_instance_security_group" {
+  description = "App Instance Security Group Name"
   type    = string
   default = "app-instance-security-group"
 }
 
 variable "db_security_group" {
+  description = "Database Security Group Name"
   type    = string
   default = "db-security-group"
+}
+
+################################################################################
+# EC2 Module - Variables 
+################################################################################
+
+variable "image_id" {
+  description = "Image ID"
+  type    = string
+  default = "ami-084e8c05825742534"
+}
+
+variable "instance_type" {
+  description = "Type of EC2 instance"
+  type    = string
+  default = "t2.nano"
+}
+
+variable "name_prefix" {
+  description = "Name of Launch Template"
+  type    = string
+  default = "app-launch-template"
+}
+
+variable "vpc_security_group_ids" {
+  description = "A list of security group IDs to associate with"
+  type = string
+}
+
+variable "id_app" {
+  description = "Launch Template ID"
+  type    = string
+  default = "aws_launch_template.main.id"
+}
+
+################################################################################
+# RDS Module - Variables 
+################################################################################
+
+variable "engine_name" {
+  description = "Database Type"
+  type    = string
+  default = "mysql"
+}
+
+variable "engine_version" {
+  description = "Database Version"
+  type    = string
+  default = "8.0"
+}
+
+variable "storage" {
+  description = "GB Storage"
+  type    = string
+  default = "10"
+}
+
+variable "identifier" {
+  description = "Database Identifier"
+  type    = string
+  default = "db-mysql-dev"
+}
+
+variable "instance_class" {
+  description = "Instance Type of the Database"
+  type    = string
+  default = "db.t2.micro"
+}
+
+variable "multi_az" {
+  description = "Database across multiple Availability Zones"
+  type    = string
+  default = "true"
+}
+
+variable "database_name" {
+  description = "Database Name"
+  type    = string
+  default = "dbmysql"
+}
+
+variable "database_username" {
+description = "Database Username"
+  type    = string
+  default = "dbadmin"
+}
+
+variable "database_password" {
+  description = "Database Password"
+  sensitive = "true"
+  type    = string
+  default = "S0methingS3cure!"
+}
+
+variable "database_port" {
+  description = "Database Port"
+  type    = string
+  default = "3306"
+}
+
+variable "publicly_accessible" {
+  description = "Database publicly accessible"
+  type    = string
+  default = "false"
+}
+
+variable "database_snapshot" {
+  description = "Snapshot of the Database"
+  type    = string
+  default = "true"
 }
