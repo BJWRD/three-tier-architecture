@@ -1,3 +1,8 @@
 output "id_app" {
-  value = aws_launch_template.app_launch_template.id
+  description = "Launch Template ID"
+  value = aws_launch_template.main.id
 }
+
+output "instance_ip_addr"
+  description = "The private IP address of the main server instance."
+  value = aws_launch_template.public_ip
