@@ -3,22 +3,22 @@ output "vpc_id" {
   value = aws_vpc.main.id
 }
 
-output "db_subnet_group" {
+output "database_subnet_group" {
   description = "Database Subnet Group"
   value = aws_db_subnet_group.main.id
 }
 
-output "security_group_app_sg" {
+output "app_security_group" {
   description = "App Instance Security Group"
-  value = aws_security_group.app_sg.id
+  value = aws_security_group.app_security_group.id
 }
 
-output "security_group_alb_sg" {
+output "alb_security_group" {
   description = "Application Load Balancer Security Group"
-  value = aws_security_group.alb_sg.id
+  value = aws_security_group.alb_security_group.id
 }
 
-output "security_group_db_sg {
+output "db_security_group" {
   description = "Database Security Group"
-  value = aws_security_group.db_sg.id
+  value = aws_security_group.db_security_group.id
 }

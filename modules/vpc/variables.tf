@@ -68,7 +68,7 @@ variable "load_balancer_type" {
   type = string
 }
 
-variable "security_group_alb_sg" {
+variable "alb_security_group" {
   description = "Application Load Balancer Security Group"
   type = string
 }
@@ -143,22 +143,22 @@ variable "min_size" {
   type = string
 }
 
-variable "database_subnet_group" {
+variable "db_subnet_group_name" {
   description = "Database Subnet Group Name"
   type = string
 }
 
-variable "alb_app_security_group" {
+variable "alb_security_group_name" {
   description = "Application Load Balancer App Security Group Name"
   type = string
 }
 
-variable "app_instance_security_group" {
+variable "app_security_group_name" {
   description = "App Instance Security Group Name"
   type = string
 }
 
-variable "db_security_group" {
+variable "db_security_group_name" {
   description = "Database Security Group Name"
   type = string
 }

@@ -34,12 +34,12 @@ locals {
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
-  tags = merge(local.tags, { Name = "VPC" })
+  tags = merge(local.required_tags, { Name = "VPC" })
 }
 
 #Public subnet
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.vpc.id
+  vpc_id                  = var.vpc_id
   for_each                = var.public_subnet
   availability_zone       = each.key
   cidr_block              = each.value
@@ -50,7 +50,7 @@ resource "aws_subnet" "public_subnet" {
 
 #Private subnet
 resource "aws_subnet" "private_subnet" {
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = var.vpc_id
   for_each          = var.private_subnet
   availability_zone = each.key
   cidr_block        = each.value
@@ -60,12 +60,12 @@ resource "aws_subnet" "private_subnet" {
 
 #Database Subnet
 resource "aws_subnet" "database_subnet" {
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = var.vpc_id
   for_each          = var.database_subnet
   availability_zone = each.key
   cidr_block        = each.value
 
-  tags = merge(local.tags, { Name = "Database-Subnet" })
+  tags = merge(local.required_tags, { Name = "Database-Subnet" })
 }
 
 #Internet Gateway for the Public Subnet
@@ -77,7 +77,7 @@ resource "aws_internet_gateway" "main" {
 
 #Route Table for the Internet Gateway / Public Subnet
 resource "aws_route_table" "main" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = var.vpc_id
   for_each = var.public_subnet
 
   route {
@@ -85,7 +85,7 @@ resource "aws_route_table" "main" {
     gateway_id             = var.gateway_id 
   }
 
-  tags = merge(local.tags, { Name = "Public-Route-Table" })
+  tags = merge(local.required_tags, { Name = "Public-Route-Table" })
 }
 
 #Route table associations - Public
@@ -100,7 +100,7 @@ resource "aws_lb" "main" {
   name               = var.app_alb
   internal           = var.alb_internal
   load_balancer_type = var.load_balancer_type
-  security_groups    = [var.security_group_alb_sg]
+  security_groups    = [var.alb_security_group]
   subnets            = [for value in aws_subnet.public_subnet : value.id] #######NEEDS REVIEWING
 
   tags = merge(local.required_tags, { Name = "Application-ALB" })
@@ -148,7 +148,7 @@ resource "aws_autoscaling_group" "main" {
 
 # Database Subnet Group
 resource "aws_db_subnet_group" "main" {
-  name       = var.database_subnet_group
+  name       = var.db_subnet_group_name
   subnet_ids = [for value in aws_subnet.database_subnet : value.id]
 
   tags = merge(local.required_tags, { Name = "Database-Subnet-Group" })
@@ -157,8 +157,8 @@ resource "aws_db_subnet_group" "main" {
 ################################################################################
 # ALB - Security Group
 ################################################################################
-resource "aws_security_group" "alb_sg" {
-  name        = var.alb_app_security_group
+resource "aws_security_group" "alb_security_group" {
+  name        = var.alb_security_group_name
   description = "Security Group for Application Load Balancer"
   vpc_id      = var.vpc_id
 
@@ -194,8 +194,8 @@ resource "aws_security_group" "alb_sg" {
 ################################################################################
 # EC2 - Security Group 
 ################################################################################
-resource "aws_security_group" "app_sg" {
-  name        = var.app_security_group
+resource "aws_security_group" "app_security_group" {
+  name        = var.app_security_group_name
   description = "Security Group for EC2 Host"
   vpc_id      = var.vpc_id
 
@@ -232,8 +232,8 @@ resource "aws_security_group" "app_sg" {
 # RDS - Security Group
 ################################################################################
 
-resource "aws_security_group" "db_sg" {
-  name        = var.db_security_group
+resource "aws_security_group" "db_security_group" {
+  name        = var.db_security_group_name
   description = "Security Group for RDS MySQL Database"
   vpc_id      = var.vpc_id
 
@@ -245,7 +245,7 @@ resource "aws_security_group" "db_sg" {
       from_port   = ingress.value.port
       to_port     = ingress.value.port
       protocol    = "tcp"
-      security_groups = [aws_security_group.app_instance_sg.id]
+      security_groups = [aws_security_group.db_security_group.id]
 
     }
   }
