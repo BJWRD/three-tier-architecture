@@ -18,6 +18,10 @@ storage = [
   "10"
 ]
 
+db_subnet_group_name = [
+  "db-subnet-group"
+]
+
 identifier = [
   "db-mysql-dev"
 ]
