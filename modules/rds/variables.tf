@@ -24,7 +24,7 @@ variable "storage" {
 }
 
 variable "db_subnet_group_name" {
-  description = "Database Subnet Group "
+  description = "Database Subnet Group Name"
   type = string
 }
 
@@ -69,7 +69,7 @@ variable "publicly_accessible" {
   type = string
 }
 
-variable "database_security_group" {
+variable "db_security_group" {
   description = "Database Security Group"
   type = string
 }
