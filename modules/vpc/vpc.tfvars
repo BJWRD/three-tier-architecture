@@ -58,8 +58,8 @@ load_balancer_type = [
   "application"
 ]
 
-security_group_alb_sg = [
-  "aws_security_group.alb_sg.id"
+security_group_alb_security_group = [
+  "aws_security_group.alb_security_group.id"
 ]
 
 app_alb = [
@@ -118,19 +118,19 @@ min_size = [
   "1"
 ]
 
-database_subnet_group = [
-  "database-subnet-group"
+db_subnet_group_name = [
+  "db-subnet-group"
 ]
 
-alb_app_security_group = [
+alb_security_group_name = [
   "alb-app-security-group"
 ]
 
-app_instance_security_group = [
+app_security_group_name = [
   "app-instance-security-group"
 ]
 
-db_security_group = [
+db_security_group_name = [
   "db-security-group"
 ]
 
