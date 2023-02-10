@@ -34,7 +34,7 @@ locals {
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
-  tags = merge(local.required_tags, { Name = "VPC" })
+  tags = merge(local.required_tags, { Name = "VPC-Dev" })
 }
 
 #Public subnet
@@ -92,7 +92,7 @@ resource "aws_route_table" "main" {
 resource "aws_route_table_association" "main" {
   subnet_id      = aws_subnet.public_subnet[each.key].id
   for_each       = var.public_subnet
-  route_table_id = var.route_table_id 
+  route_table_id = aws_route_table.main[each.key].id
 }
 
 #Application Load Balancer
@@ -101,20 +101,20 @@ resource "aws_lb" "main" {
   internal           = var.alb_internal
   load_balancer_type = var.load_balancer_type
   security_groups    = [var.alb_security_group]
-  subnets            = [for value in aws_subnet.public_subnet : value.id] #######NEEDS REVIEWING
+  subnets            = [for value in aws_subnet.public_subnet : value.id] 
 
   tags = merge(local.required_tags, { Name = "Application-ALB" })
 }
 
 #Application Load Balancer Listener
 resource "aws_lb_listener" "main" {
-  load_balancer_arn = var.load_balancer_arn
+  load_balancer_arn = aws_lb.main.arn
   port              = var.alb_listener_port
   protocol          = var.alb_listener_protocol
 
   default_action {
     type             = var.alb_listener_type
-    target_group_arn = var.alb_target_group_arn
+    target_group_arn = aws_lb_target_group.main.arn
   }
 }
 
@@ -138,7 +138,7 @@ resource "aws_autoscaling_group" "main" {
   max_size            = var.max_size
   min_size            = var.min_size
   target_group_arns   = [aws_lb_target_group.main.arn]
-  vpc_zone_identifier = [for value in aws_subnet.public_subnet : value.id]##### NEEDS REVIEWING
+  vpc_zone_identifier = [for value in aws_subnet.public_subnet : value.id]
 
   launch_template {
     id      = var.id_app
@@ -208,6 +208,7 @@ resource "aws_security_group" "app_security_group" {
       to_port     = ingress.value.port
       protocol    = "tcp"
       cidr_blocks = [var.cidr_block]
+      security_groups = [var.alb_security_group]
 
     }
   }
@@ -245,7 +246,7 @@ resource "aws_security_group" "db_security_group" {
       from_port   = ingress.value.port
       to_port     = ingress.value.port
       protocol    = "tcp"
-      security_groups = [aws_security_group.db_security_group.id]
+      security_groups = [var.app_security_group]
 
     }
   }
