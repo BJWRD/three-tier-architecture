@@ -24,7 +24,7 @@ variable "storage" {
 }
 
 variable "db_subnet_group_name" {
-  description = "Database Subnet Group Name"
+  description = "Database Subnet Group"
   type = string
 }
 

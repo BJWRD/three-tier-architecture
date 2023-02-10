@@ -18,10 +18,6 @@ storage = [
   "10"
 ]
 
-db_subnet_group_name = [
-  "db-subnet-group"
-]
-
 identifier = [
   "db-mysql-dev"
 ]
@@ -56,4 +52,12 @@ publicly_accessible = [
 
 database_snapshot = [
   "true"
+]
+
+db_subnet_group_name = [
+  "aws_db_subnet_group.main.id"
+]
+
+db_security_group = [
+  "aws_security_group.db_security_group.id"
 ]

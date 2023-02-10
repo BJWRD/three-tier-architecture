@@ -14,7 +14,7 @@ resource "aws_db_instance" "main" {
   identifier                   = var.identifier
   instance_class               = var.instance_class
   multi_az                     = var.multi_az
-  db_name                         = var.database_name
+  db_name                      = var.database_name
   username                     = var.database_username
   password                     = var.database_password
   port                         = var.database_port
