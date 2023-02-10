@@ -6,8 +6,8 @@ environment = [
   "dev"
 ]
 
-variable "vpc_id" [
-  "VPC-Dev"
+vpc_id = [
+  "aws_vpc.main.id"
 ]
 
 vpc_cidr = [
@@ -134,3 +134,12 @@ db_security_group_name = [
   "db-security-group"
 ]
 
+app_security_group = [
+  "aws_security_group.app_security_group.id" # REORDER
+]
+
+
+
+db_security_group = [
+  "aws_security_group.db_security_group.id"
+]
