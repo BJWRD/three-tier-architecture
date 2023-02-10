@@ -162,3 +162,13 @@ variable "db_security_group_name" {
   description = "Database Security Group Name"
   type = string
 }
+
+variable "app_security_group" {
+  description = "Application Security Group"
+  type = string
+}
+
+variable "db_security_group" {
+  description = "Database Security Group"
+  type = string
+}
