@@ -3,7 +3,12 @@ output "vpc_id" {
   value = aws_vpc.main.id
 }
 
-output "database_subnet_group" {
+output "gateway_id" {
+  description = "Identifier of the VPC Internet Gateway" 
+  value = aws_internet_gateway.main.id
+}
+
+output "database_subnet_group_name" {
   description = "Database Subnet Group"
   value = aws_db_subnet_group.main.id
 }
