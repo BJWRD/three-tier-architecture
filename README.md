@@ -11,23 +11,19 @@ This network architecture has three subnet tiers split across three availability
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 * Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
 
+
 # How to Apply/Destroy
 This section details the deployment and teardown of the three-tier-architecture. **Warning: this will create AWS resources that costs money**
 
-## Deployment steps
-
-### Applying the Terraform Configuration
+## Deployment Steps
 
 #### 1.	Clone the repo
-
     git clone https://github.com/BJWRD/three-tier-architecture
 
 #### 2. Access the relevant environment 
-Change directory to the relevant environment 
-
     cd dev
     
-**NOTE:** Dependent on whether you plan to provision resources which are adequate for a `dev/stage/prod` environment.
+**NOTE:** The environment you choose is dependent on whether you plan to provision resources which are adequate for a `dev/stage/prod` environment.
 
 #### 3. Update the s3 bucket name to your own - `versions.tf`
 
@@ -94,29 +90,33 @@ Enter Image
 | Name          | Version       |
 | ------------- |:-------------:|
 | terraform     | ~>0.15.0      |
-| aws           | ~>3.44.0      |
+| aws           | ~>3.50.0      |
 
 ## Providers
 | Name          | Version       |
 | ------------- |:-------------:|
-| aws           | ~>3.44.0      |
+| aws           | ~>3.50.0      |
 
 ## Modules
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_ec2"></a> [ec2](#module\_ec2) | terraform-aws-modules/ec2/aws | ~> 3.0 |
+| Name | Source |
+|------|--------|
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | three-tier-architecture/modules/vpc |
+| <a name="module_ec2"></a> [ec2](#module\_ec2) | three-tier-architecture/modules/ec2 |
+| <a name="module_rds"></a> [rds](#module\_rds) | three-tier-architecture/modules/rds |
 
 ## Resources
 | Name          | Type       |
 | ------------- |:-------------:|
-| aws           | ~>3.44.0      |
-
-## Inputs
-| Name | Description | Type |
-|------|-------------|------|
-| aws  | ~>3.44.0    |------|
-
-## Outputs
-| Name          | Description   |
-| ------------- |:-------------:|
-| aws           | ~>3.44.0      |
+| [aws_launch_template](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_launch_template) | resource |
+| [aws_db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_instance) | resource |
+| [aws_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_vpc) | resource |
+| [aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_subnet) | resource |
+| [aws_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_internet_gateway) | resource |
+| [aws_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table) | resource |
+| [aws_route_table_association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_route_table_association) | resource |
+| [aws_lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb) | resource |
+| [aws_lb_listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_listener) | resource |
+| [aws_lb_target_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_lb_target_group) | resource |
+| [aws_autoscaling_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_autoscaling_group) | resource |
+| [aws_db_subnet_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_db_subnet_group) | resource |
+| [aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/aws_security_group) | resource |
