@@ -14,49 +14,109 @@ This network architecture has three subnet tiers split across three availability
 # How to Apply/Destroy
 This section details the deployment and teardown of the three-tier-architecture. **Warning: this will create AWS resources that costs money**
 
-**Deployment steps**
+## Deployment steps
 
-1.	Clone the repo
-`git clone`
+### Applying the Terraform Configuration
 
-2.	Access the relevant environments – dev, stage, prod
-`cd dev`
+#### 1.	Clone the repo
 
-3.	Initialise the working directory, which contains the tf configuration 
-`terraform init`
+    git clone https://github.com/BJWRD/three-tier-architecture
 
-4.	 Ensure the terraform code is formatted and validated 
-`terraform fmt` and `terraform validate`
+#### 2. Access the relevant environment 
+Change directory to the relevant environment 
 
-5.	Create an execution plan
-`terraform plan`
+    cd dev
+    
+**NOTE:** Dependent on whether you plan to provision resources which are adequate for a `dev/stage/prod` environment.
 
-6.	Execute terraform configuration 
-`terraform apply --auto-approve`
+#### 3. Update the s3 bucket name to your own - `versions.tf`
 
-**Teardown steps**
+    backend "s3" {
+      bucket = "ENTER HERE"
+      key    = "terraform.tfstate"
+      region = "eu-west-2"
+    }
 
-1.	Destroy the deployed AWS Infrastructure 
+#### 4.	Initialise the TF directory
+    terraform init
+
+#### 5. Ensure the terraform code is formatted and validated 
+    terraform fmt && terraform validate
+
+#### 6. Create an execution plan
+    terraform plan
+
+#### 7. Execute terraform configuration 
+    terraform apply --auto-approve
+
+## Verification Steps 
+
+#### 1. Check AWS Infrastructure
+Check the infrastructure deployment status, by enter the following terraform command -
+
+     terraform show
+
+Enter Image
+
+Alternatively, log into the AWS Console and verify your AWS infrastructure deployment from there.
+
+#### VPC Verification
+
+Enter Image
+
+#### EC2 Verification
+
+Enter Image
+
+####  RDS Verification
+
+Enter Image
+
+#### 2. Verify bjwrd/app.py webapp is running via Docker 
+Retrieve the ALB DNS address and search within your browser. You should then be able to see the Hello World response -
+
+Enter Image 
+
+Alternatively, curl the address from your terminal -
+
+    curl <ENTER ADDRESS HERE>
+    
+Enter Image
+
+## Teardown Steps
+
+####  1. Destroy the deployed AWS Infrastructure 
 `terraform destroy --auto-approve`
 
+Enter Image
 
-# Requirements
+## Requirements
 | Name          | Version       |
 | ------------- |:-------------:|
 | terraform     | ~>0.15.0      |
 | aws           | ~>3.44.0      |
 
-# Providers
+## Providers
 | Name          | Version       |
 | ------------- |:-------------:|
 | aws           | ~>3.44.0      |
 
+## Modules
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_ec2"></a> [ec2](#module\_ec2) | terraform-aws-modules/ec2/aws | ~> 3.0 |
 
-# List of tools/services used
-* terraform
-* awscli
-* drawio
-* Bash
-* EC2 (Launch Templates – Application Load Balancers – Security Groups – Subnets – Auto Scaling Groups)
-* VPC (Subnets – Route Tables – Internet Gateway)
-* RDS (MySQL)
+## Resources
+| Name          | Type       |
+| ------------- |:-------------:|
+| aws           | ~>3.44.0      |
+
+## Inputs
+| Name | Description | Type |
+|------|-------------|------|
+| aws  | ~>3.44.0    |------|
+
+## Outputs
+| Name          | Description   |
+| ------------- |:-------------:|
+| aws           | ~>3.44.0      |
