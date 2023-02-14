@@ -10,6 +10,7 @@ This network architecture has three subnet tiers split across three availability
 * Terraform installation - [steps](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 * Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
+* tfupdate installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
 
 
 # How to Apply/Destroy
@@ -18,31 +19,38 @@ This section details the deployment and teardown of the three-tier-architecture.
 ## Deployment Steps
 
 #### 1.	Clone the repo
-    git clone https://github.com/BJWRD/three-tier-architecture
-
-#### 2. Access the relevant environment 
-    cd dev
+    git clone https://github.com/BJWRD/three-tier-architecture && cd three-tier-architecture
     
-**NOTE:** The environment you choose is dependent on whether you plan to provision resources which are adequate for a `dev/stage/prod` environment.
-
-#### 3. Update the s3 bucket name to your own - `versions.tf`
+#### 2. Update the s3 bucket name to your own - `versions.tf`
 
     backend "s3" {
       bucket = "ENTER HERE"
       key    = "terraform.tfstate"
       region = "eu-west-2"
     }
+    
 
-#### 4.	Initialise the TF directory
+#### 3. Update `versions.tf`
+    tfupdate terraform versions.tf && tfupdate providers versions.tf
+    
+#### 4. Access the relevant environment 
+    cd dev
+    
+**NOTE:** The environment you choose is dependent on whether you plan to provision resources which are adequate for a `dev/stage/prod` environment.
+
+#### 5.	Initialise the TF directory
     terraform init
 
 #### 5. Ensure the terraform code is formatted and validated 
     terraform fmt && terraform validate
 
-#### 6. Create an execution plan
+#### 6. `tfsec` - vulnerability check
+    tfsec
+    
+#### 7. Create an execution plan
     terraform plan
 
-#### 7. Execute terraform configuration 
+#### 8. Execute terraform configuration 
     terraform apply --auto-approve
 
 ## Verification Steps 
