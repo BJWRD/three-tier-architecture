@@ -52,6 +52,9 @@ This section details the deployment and teardown of the three-tier-architecture.
 
 #### 8. Execute terraform configuration 
     terraform apply --auto-approve
+    
+<img width="348" alt="image" src="https://user-images.githubusercontent.com/83971386/218799991-3bd9f750-5984-496a-9c11-2f145622339d.png">
+
 
 ## Verification Steps 
 
@@ -60,21 +63,23 @@ Check the infrastructure deployment status, by enter the following terraform com
 
      terraform show
 
-Enter Image
+<img width="426" alt="image" src="https://user-images.githubusercontent.com/83971386/218800177-9b4fde90-80ca-41ab-aa20-d8a199e104a3.png">
+
+**NOTE:** You may want to ouput `terraform show` to a .txt file for easier viewing i.e. terraform show > tf_infrastructure.txt
 
 Alternatively, log into the AWS Console and verify your AWS infrastructure deployment from there.
 
 #### VPC Verification
 
-Enter Image
+<img width="673" alt="image" src="https://user-images.githubusercontent.com/83971386/218800769-18a359e8-78d9-45d7-bdaf-f1a96226a7eb.png">
 
 #### EC2 Verification
 
-Enter Image
+<img width="683" alt="image" src="https://user-images.githubusercontent.com/83971386/218800989-fbf36f30-fb24-4e9b-925b-5bd3b7fefee4.png">
 
 ####  RDS Verification
 
-Enter Image
+<img width="652" alt="image" src="https://user-images.githubusercontent.com/83971386/218801322-bd18927c-e7de-4aa9-bf96-7aa460f13f67.png">
 
 #### 2. Verify bjwrd/app.py webapp is running via Docker 
 Retrieve the ALB DNS address and search within your browser. You should then be able to see the Hello World response -
