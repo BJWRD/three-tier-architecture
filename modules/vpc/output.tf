@@ -8,7 +8,7 @@ output "gateway_id" {
   value = aws_internet_gateway.main.id
 }
 
-output "database_subnet_group_name" {
+output "aws_db_subnet_group_main" {
   description = "Database Subnet Group"
   value = aws_db_subnet_group.main.id
 }
