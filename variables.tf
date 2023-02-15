@@ -172,19 +172,19 @@ variable "app_autoscaling_group" {
 variable "desired_capacity" {
   description = "The number of EC2 instances that should be running in the group"
   type        = string
-  default     = "1"
+  default     = "3"
 }
 
 variable "max_size" {
   description = "The maximum size of the autoscale group"
   type        = string
-  default     = "1"
+  default     = "3"
 }
 
 variable "min_size" {
   description = "The minimum size of the autoscale group"
   type        = string
-  default     = "1"
+  default     = "3"
 }
 
 variable "db_subnet_group_name" {
@@ -213,8 +213,8 @@ variable "db_security_group_name" {
 
 variable "app_security_group" {
   description = "Application Security Group"
-  type = string
-  default = "aws_security_group.app_security_group.id" #<<<<< REORDER
+  type        = string
+  default     = "aws_security_group.app_security_group.id"
 }
 
 ################################################################################
@@ -243,6 +243,30 @@ variable "id_app" {
   description = "Launch Template ID"
   type        = string
   default     = "aws_launch_template.main.id"
+}
+
+variable "key_name" {
+  description = "Name of the Private Key to be used for the EC2 Instance"
+  type        = string
+  default     = "terraform"
+}
+
+variable "connection_type" {
+  description = "The type of connection used for the EC2 Instance"
+  type        = string
+  default     = "ssh"
+}
+
+variable "connection_user" {
+  description = "EC2 User"
+  type        = string
+  default     = "ec2-user"
+}
+
+variable "connection_host" {
+  description = "Allows connection to the newly created EC2 Instances"
+  type        = string
+  default     = "self.public_ip"
 }
 
 ################################################################################
