@@ -107,15 +107,15 @@ app_autoscaling_group = [
 ]
 
 desired_capacity = [
-  "1"
+  "3"
 ]
 
 max_size = [
-  "1"
+  "3"
 ]
 
 min_size = [
-  "1"
+  "3"
 ]
 
 db_subnet_group_name = [
@@ -135,11 +135,5 @@ db_security_group_name = [
 ]
 
 app_security_group = [
-  "aws_security_group.app_security_group.id" # REORDER
-]
-
-
-
-db_security_group = [
-  "aws_security_group.db_security_group.id"
+  "aws_security_group.app_security_group.id"
 ]

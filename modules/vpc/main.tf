@@ -4,8 +4,8 @@ locals {
     environment = "dev"
   }
 
-  ingress_rules = [{
-    port        = 8080
+  app_ingress_rules = [{
+    port        = 80
     description = "Allow HTTP access"
     },
     {
@@ -17,14 +17,19 @@ locals {
       description = "Allow SSH access"
   }]
 
-  egress_rules = [{
-    port        = 0
-    description = "All all Egress traffic"
+  alb_ingress_rules = [{
+     port        = 0
+    description = "Allow all Ingress traffic"
   }]
 
   rds_ingress_rules = [{
     port            = 3306
     description     = "Allow MySQL access"
+  }]
+
+  egress_rules = [{
+     port        = 0
+    description = "Allow all Egress traffic"
   }]
 }
 
@@ -163,7 +168,7 @@ resource "aws_security_group" "alb_security_group" {
   vpc_id      = var.vpc_id
 
     dynamic "ingress" {
-    for_each = local.ingress_rules
+    for_each = local.alb_ingress_rules
 
     content {
       description = ingress.value.description
@@ -182,7 +187,7 @@ resource "aws_security_group" "alb_security_group" {
       description = egress.value.description
       from_port   = egress.value.port
       to_port     = egress.value.port
-      protocol    = "tcp"
+      protocol    = "-1"
       cidr_blocks = [var.cidr_block]
 
     }
@@ -200,7 +205,7 @@ resource "aws_security_group" "app_security_group" {
   vpc_id      = var.vpc_id
 
   dynamic "ingress" {
-    for_each = local.ingress_rules
+    for_each = local.app_ingress_rules
 
     content {
       description = ingress.value.description
@@ -220,7 +225,7 @@ resource "aws_security_group" "app_security_group" {
       description = egress.value.description
       from_port   = egress.value.port
       to_port     = egress.value.port
-      protocol    = "tcp"
+      protocol    = "-1"
       cidr_blocks = [var.cidr_block]
 
     }
@@ -239,14 +244,14 @@ resource "aws_security_group" "db_security_group" {
   vpc_id      = var.vpc_id
 
   dynamic "ingress" {
-    for_each = local.ingress_rules
+    for_each = local.rds_ingress_rules
 
     content {
       description = ingress.value.description
       from_port   = ingress.value.port
       to_port     = ingress.value.port
       protocol    = "tcp"
-      security_groups = [var.app_security_group]
+      security_groups = [aws_security_group.app_security_group.id]
 
     }
   }
@@ -258,7 +263,7 @@ resource "aws_security_group" "db_security_group" {
       description = egress.value.description
       from_port   = egress.value.port
       to_port     = egress.value.port
-      protocol    = "tcp"
+      protocol    = "-1"
       cidr_blocks = [var.cidr_block]
 
     }
