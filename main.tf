@@ -39,6 +39,7 @@ module "vpc" {
   db_security_group_name    = var.db_security_group_name
   db_security_group         = var.db_security_group
   app_security_group        = var.app_security_group
+
 }
 
 module "ec2" {
@@ -49,6 +50,10 @@ module "ec2" {
   instance_type      = var.instance_type
   app_security_group = module.vpc.app_security_group
   name_prefix        = var.name_prefix
+  key_name           = var.key_name
+  connection_type    = var.connection_type
+  connection_user    = var.connection_user
+  connection_host    = var.connection_host
 }
 
 module "rds" {
@@ -58,7 +63,7 @@ module "rds" {
   engine_name          = var.engine_name
   engine_version       = var.engine_version
   storage              = var.storage
-  db_subnet_group_name = var.db_subnet_group_name
+  db_subnet_group_name = module.vpc.aws_db_subnet_group_main
   identifier           = var.identifier
   instance_class       = var.instance_class
   multi_az             = var.multi_az
@@ -67,6 +72,6 @@ module "rds" {
   database_password    = var.database_password
   database_port        = var.database_port
   publicly_accessible  = var.publicly_accessible
-  db_security_group    = var.db_security_group
+  db_security_group    = module.vpc.db_security_group
   database_snapshot    = var.database_snapshot
 }
