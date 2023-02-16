@@ -18,7 +18,6 @@ module "vpc" {
   subnet_id                 = var.subnet_id
   id_app                    = module.ec2.id_app
   load_balancer_type        = var.load_balancer_type
-  alb_security_group        = module.vpc.alb_security_group
   app_alb                   = var.app_alb
   alb_internal              = var.alb_internal
   load_balancer_arn         = var.load_balancer_arn
@@ -37,7 +36,7 @@ module "vpc" {
   alb_security_group_name   = var.alb_security_group_name
   app_security_group_name   = var.app_security_group_name
   db_security_group_name    = var.db_security_group_name
-  db_security_group         = var.db_security_group
+  alb_security_group        = module.vpc.alb_security_group
   app_security_group        = var.app_security_group
 
 }
