@@ -97,12 +97,6 @@ variable "load_balancer_type" {
   default     = "application"
 }
 
-variable "alb_security_group" {
-  description = "Application Load Balancer Security Group"
-  type        = string
-  default     = "aws_security_group.alb_security_group.id"
-}
-
 variable "app_alb" {
   description = "Name of Application Load Balancer"
   type        = string
@@ -209,6 +203,12 @@ variable "db_security_group_name" {
   description = "Database Security Group Name"
   type        = string
   default     = "db-security-group"
+}
+
+variable "alb_security_group" {
+  description = "Application Load Balancer Security Group"
+  type        = string
+  default     = "aws_security_group.alb_security_group.id"
 }
 
 variable "app_security_group" {
