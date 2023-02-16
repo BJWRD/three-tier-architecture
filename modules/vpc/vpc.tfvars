@@ -58,10 +58,6 @@ load_balancer_type = [
   "application"
 ]
 
-security_group_alb_security_group = [
-  "aws_security_group.alb_security_group.id"
-]
-
 app_alb = [
   "app-alb"
 ]
@@ -132,6 +128,10 @@ app_security_group_name = [
 
 db_security_group_name = [
   "db-security-group"
+]
+
+alb_security_group = [
+  "aws_security_group.alb_security_group.id"
 ]
 
 app_security_group = [

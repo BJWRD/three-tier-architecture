@@ -4,7 +4,7 @@ locals {
     environment = "dev"
   }
 
-  app_ingress_rules = [{
+  ingress_rules = [{
     port        = 80
     description = "Allow HTTP access"
     },
@@ -15,11 +15,6 @@ locals {
     {
       port        = 22
       description = "Allow SSH access"
-  }]
-
-  alb_ingress_rules = [{
-     port        = 0
-    description = "Allow all Ingress traffic"
   }]
 
   rds_ingress_rules = [{
@@ -131,9 +126,16 @@ resource "aws_lb_target_group" "main" {
   vpc_id   = var.vpc_id
 
   health_check {
+    protocol  = var.alb_target_group_protocol
     port     = var.alb_target_group_port
-    protocol = var.alb_target_group_protocol
   }
+}
+
+#Application Load Balancer Target Group Attachment 
+resource "aws_lb_target_group_attachment" "main" {
+  target_group_arn  = aws_lb_target_group.main.arn
+  target_id         = var.id_app
+  port              = var.alb_target_group_port
 }
 
 #Auto Scaling Group
@@ -142,7 +144,7 @@ resource "aws_autoscaling_group" "main" {
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
   min_size            = var.min_size
-  target_group_arns   = [aws_lb_target_group.main.arn]
+  target_group_arns = [var.alb_target_group_arn]
   vpc_zone_identifier = [for value in aws_subnet.public_subnet : value.id]
 
   launch_template {
@@ -168,7 +170,7 @@ resource "aws_security_group" "alb_security_group" {
   vpc_id      = var.vpc_id
 
     dynamic "ingress" {
-    for_each = local.alb_ingress_rules
+    for_each = local.ingress_rules
 
     content {
       description = ingress.value.description
@@ -205,7 +207,7 @@ resource "aws_security_group" "app_security_group" {
   vpc_id      = var.vpc_id
 
   dynamic "ingress" {
-    for_each = local.app_ingress_rules
+    for_each = local.ingress_rules
 
     content {
       description = ingress.value.description
