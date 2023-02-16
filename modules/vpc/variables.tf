@@ -68,11 +68,6 @@ variable "load_balancer_type" {
   type = string
 }
 
-variable "alb_security_group" {
-  description = "Application Load Balancer Security Group"
-  type = string
-}
-
 variable "app_alb" {
   description = "Name of Application Load Balancer"
   type = string
@@ -163,12 +158,12 @@ variable "db_security_group_name" {
   type = string
 }
 
-variable "app_security_group" {
-  description = "Application Security Group"
+variable "alb_security_group" {
+  description = "Application Load Balancer Security Group"
   type = string
 }
 
-variable "db_security_group" {
-  description = "Database Security Group"
+variable "app_security_group" {
+  description = "Application Security Group"
   type = string
 }
