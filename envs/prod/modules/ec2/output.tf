@@ -1,3 +1,4 @@
 output "id_app" {
-  value = aws_launch_template.app_launch_template.id
+  description = "Launch Template ID"
+  value = aws_launch_template.main.id
 }
