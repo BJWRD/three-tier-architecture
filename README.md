@@ -11,7 +11,7 @@ This network architecture has three subnet tiers split across three availability
 * AWS EC2 key pair - [steps](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html)
 * Environment Variables for AWS CLI - [steps](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
 * tfupdate installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
-
+* tfsec installation - [steps](https://github.com/antonbabenko/pre-commit-terraform#how-to-install)
 
 # How to Apply/Destroy
 This section details the deployment and teardown of the three-tier-architecture. **Warning: this will create AWS resources that costs money**
@@ -31,7 +31,7 @@ This section details the deployment and teardown of the three-tier-architecture.
     
 
 #### 3. Update `versions.tf`
-    tfupdate terraform versions.tf && tfupdate providers versions.tf
+    tfupdate terraform versions.tf && tfupdate provider aws versions.tf
     
 #### 4. Access the relevant environment 
     cd dev
@@ -75,34 +75,32 @@ Alternatively, log into the AWS Console and verify your AWS infrastructure deplo
 
 #### EC2 Verification
 
-<img width="683" alt="image" src="https://user-images.githubusercontent.com/83971386/218800989-fbf36f30-fb24-4e9b-925b-5bd3b7fefee4.png">
+<img width="653" alt="image" src="https://user-images.githubusercontent.com/83971386/219601104-31139fe9-2f47-4ad8-8607-77c72126bbe1.png">
 
 ####  RDS Verification
 
 <img width="652" alt="image" src="https://user-images.githubusercontent.com/83971386/218801322-bd18927c-e7de-4aa9-bf96-7aa460f13f67.png">
 
 #### 2. Verify bjwrd/app.py webapp is running via Docker 
-Retrieve the ALB DNS address and search within your browser. You should then be able to see the Hello World response -
+SSH onto one of the EC2 hosts and verify that the bjwrd/app.py docker container is running -
 
-Enter Image 
-
-Alternatively, curl the address from your terminal -
-
-    curl <ENTER ADDRESS HERE>
+    docker ps
     
-Enter Image
+<img width="513" alt="image" src="https://user-images.githubusercontent.com/83971386/219605219-28d1478f-ebcd-4cc5-af4e-5693aea96725.png">
+
+Alternatively, you can retrieve the ALB DNS address and search within your browser.
 
 ## Teardown Steps
 
 ####  1. Destroy the deployed AWS Infrastructure 
 `terraform destroy --auto-approve`
 
-Enter Image
+<img width="381" alt="image" src="https://user-images.githubusercontent.com/83971386/219432782-46a8ae1c-6f03-4a7f-89bd-7dac1f79d23e.png">
 
 ## Requirements
 | Name          | Version       |
 | ------------- |:-------------:|
-| terraform     | ~>0.15.0      |
+| terraform     | ~>1.3.9       |
 | aws           | ~>3.50.0      |
 
 ## Providers
