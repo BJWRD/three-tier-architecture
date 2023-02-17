@@ -1,5 +1,5 @@
 project_name = [
-  "BJWRD-Three-Tier-Architecture"
+  "three-tier-architecture"
 ]
 
 environment = [
@@ -23,7 +23,7 @@ identifier = [
 ]
 
 instance_class = [
-  "db.t2.micro"
+  "db.t2.nano"
 ]
 
 multi_az = [
@@ -52,4 +52,12 @@ publicly_accessible = [
 
 database_snapshot = [
   "true"
+]
+
+db_subnet_group_name = [
+  "aws_db_subnet_group.main.id"
+]
+
+db_security_group = [
+  "aws_security_group.db_security_group.id"
 ]

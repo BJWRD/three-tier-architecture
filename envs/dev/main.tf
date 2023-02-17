@@ -1,70 +1,76 @@
 provider "aws" {
-  region = "eu-west-2"
-}
-
-module "ec2" {
-  source                 = "./modules/ec2"
-  image_id               = var.image_id
-  instance_type          = var.instance_type
-  vpc_security_group_ids = module.security.vpc_security_group_ids
-  id_app                 = var.id_app
-  name_prefix            = var.name_prefix
-  project_name           = var.project_name
-  environment            = var.environment
+  region = var.region
 }
 
 module "vpc" {
-  source                      = "./modules/vpc"
-  vpc_id                      = var.vpc_id
-  vpc_cidr                    = var.vpc_cidr
-  availability_zones          = var.availability_zones
-  route_table_id              = var.route_table_id
-  gateway_id                  = var.gateway_id
-  destination_cidr_block      = var.destination_cidr_block
-  aws_subnet_public_subnet    = var.aws_subnet_public_subnet
-  aws_subnet_private_subnet   = var.aws_subnet_private_subnet
-  load_balancer_type          = var.load_balancer_type
-  id_app                      = module.ec2.id_app
-  security_group_alb_app_http = module.security.security_group_alb_app_http
-  subnet_id                   = var.subnet_id
-  az_public_subnet            = var.az_public_subnet
-  az_private_subnet           = var.az_private_subnet
-  az_database_subnet          = var.az_database_subnet
-  app_alb_lb                  = var.app_alb_lb
-  app_target_group            = var.app_target_group
-  app_autoscaling_group       = var.app_autoscaling_group
-  database_subnet_group       = var.database_subnet_group
-  project_name                = var.project_name
-  environment                 = var.environment
+  source                    = "./modules/vpc"
+  project_name              = var.project_name
+  environment               = var.environment
+  vpc_id                    = module.vpc.vpc_id
+  vpc_cidr                  = var.vpc_cidr
+  public_subnet             = var.public_subnet
+  private_subnet            = var.private_subnet
+  database_subnet           = var.database_subnet
+  availability_zones        = var.availability_zones
+  cidr_block                = var.cidr_block
+  route_table_id            = var.route_table_id
+  gateway_id                = module.vpc.gateway_id
+  subnet_id                 = var.subnet_id
+  id_app                    = module.ec2.id_app
+  load_balancer_type        = var.load_balancer_type
+  app_alb                   = var.app_alb
+  alb_internal              = var.alb_internal
+  load_balancer_arn         = var.load_balancer_arn
+  alb_listener_port         = var.alb_listener_port
+  alb_listener_protocol     = var.alb_listener_protocol
+  alb_listener_type         = var.alb_listener_type
+  alb_target_group_arn      = var.alb_target_group_arn
+  alb_target_group          = var.alb_target_group
+  alb_target_group_port     = var.alb_target_group_port
+  alb_target_group_protocol = var.alb_target_group_protocol
+  app_autoscaling_group     = var.app_autoscaling_group
+  desired_capacity          = var.desired_capacity
+  max_size                  = var.max_size
+  min_size                  = var.min_size
+  db_subnet_group_name      = var.db_subnet_group_name
+  alb_security_group_name   = var.alb_security_group_name
+  app_security_group_name   = var.app_security_group_name
+  db_security_group_name    = var.db_security_group_name
+  alb_security_group        = module.vpc.alb_security_group
+  app_security_group        = var.app_security_group
+
 }
 
-module "security" {
-  source                      = "./modules/security"
-  vpc_id                      = module.vpc.vpc_id
-  alb_app_security_group      = var.alb_app_security_group
-  app_instance_security_group = var.app_instance_security_group
-  db_security_group           = var.db_security_group
-  project_name                = var.project_name
-  environment                 = var.environment
-  cidr_blocks                 = var.cidr_blocks
+module "ec2" {
+  source             = "./modules/ec2"
+  project_name       = var.project_name
+  environment        = var.environment
+  image_id           = var.image_id
+  instance_type      = var.instance_type
+  app_security_group = module.vpc.app_security_group
+  name_prefix        = var.name_prefix
+  key_name           = var.key_name
+  connection_type    = var.connection_type
+  connection_user    = var.connection_user
+  connection_host    = var.connection_host
 }
 
 module "rds" {
-  source                               = "./modules/rds"
-  aws_db_subnet_group_db_subnet        = module.vpc.aws_db_subnet_group_db_subnet
-  aws_security_group_db_security_group = module.security.aws_security_group_db_security_group
-  project_name                         = var.project_name
-  environment                          = var.environment
-  engine_name                          = var.engine_name
-  engine_version                       = var.engine_version
-  storage                              = var.storage
-  identifier                           = var.identifier
-  instance_class                       = var.instance_class
-  multi_az                             = var.multi_az
-  database_name                        = var.database_name
-  database_username                    = var.database_username
-  database_password                    = var.database_password
-  database_port                        = var.database_port
-  publicly_accessible                  = var.publicly_accessible
-  database_snapshot                    = var.database_snapshot
+  source               = "./modules/rds"
+  project_name         = var.project_name
+  environment          = var.environment
+  engine_name          = var.engine_name
+  engine_version       = var.engine_version
+  storage              = var.storage
+  db_subnet_group_name = module.vpc.aws_db_subnet_group_main
+  identifier           = var.identifier
+  instance_class       = var.instance_class
+  multi_az             = var.multi_az
+  database_name        = var.database_name
+  database_username    = var.database_username
+  database_password    = var.database_password
+  database_port        = var.database_port
+  publicly_accessible  = var.publicly_accessible
+  db_security_group    = module.vpc.db_security_group
+  database_snapshot    = var.database_snapshot
 }
