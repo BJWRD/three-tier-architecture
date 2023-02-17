@@ -131,20 +131,14 @@ resource "aws_lb_target_group" "main" {
   }
 }
 
-#Application Load Balancer Target Group Attachment 
-resource "aws_lb_target_group_attachment" "main" {
-  target_group_arn  = aws_lb_target_group.main.arn
-  target_id         = var.id_app
-  port              = var.alb_target_group_port
-}
-
 #Auto Scaling Group
 resource "aws_autoscaling_group" "main" {
   name                = var.app_autoscaling_group
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
   min_size            = var.min_size
-  target_group_arns = [var.alb_target_group_arn]
+  target_group_arns   = [aws_lb_target_group.main.arn]
+
   vpc_zone_identifier = [for value in aws_subnet.public_subnet : value.id]
 
   launch_template {
